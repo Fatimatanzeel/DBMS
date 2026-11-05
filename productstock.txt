@@ -1,0 +1,212 @@
+-- =============================================================================
+-- Tasks 1 & 2: Create the Product table with suitable data types and constraints,
+-- setting Product_ID as the PRIMARY KEY.
+-- Table: Product (Product_ID, Product_Name, Category, Price, Quantity, Supplier, Rating)
+-- =============================================================================
+CREATE TABLE Product (
+    Product_ID   NUMBER PRIMARY KEY,
+    Product_Name VARCHAR2(100) NOT NULL,
+    Category     VARCHAR2(50),
+    Price        NUMBER(10, 2) CHECK (Price >= 0),
+    Quantity     NUMBER(5) CHECK (Quantity >= 0),
+    Supplier     VARCHAR2(100),
+    Rating       NUMBER(3, 1) CHECK (Rating BETWEEN 0 AND 5)
+);
+
+-- =============================================================================
+-- Task 3: Insert at least 15 product records belonging to different categories.
+-- =============================================================================
+INSERT INTO Product VALUES (101, 'Pro Wireless Earbuds', 'Electronics', 1500.00, 25, 'TechCorp', 4.5);
+INSERT INTO Product VALUES (102, 'Smart LED TV',        'Electronics', 4500.00, 10, 'VisionMedia', 4.8);
+INSERT INTO Product VALUES (103, 'Pro Laptop Stand',    'Electronics', 1200.00, 15, 'GearLabs', 4.2);
+INSERT INTO Product VALUES (104, 'Bluetooth Speaker',   'Electronics', 800.00,  30, 'AudioHub', 3.9);
+INSERT INTO Product VALUES (105, 'Pro Gaming Mouse',    'Electronics', 2200.00,  8, 'TechCorp', 4.6);
+INSERT INTO Product VALUES (106, 'Wooden Dining Table', 'Furniture',   3500.00,  5, 'DecorHome', 4.1);
+INSERT INTO Product VALUES (107, 'Ergonomic Office Chair','Furniture', 2400.00, 18, 'DecorHome', 4.4);
+INSERT INTO Product VALUES (108, 'Bookshelf Unit',      'Furniture',   1800.00, 12, 'WoodWorks', 3.8);
+INSERT INTO Product VALUES (109, 'Pro Comfort Sofa',    'Furniture',   5000.00,  3, 'WoodWorks', 4.7);
+INSERT INTO Product VALUES (110, 'Men Denim Jacket',    'Clothing',    1600.00, 40, 'FashionHub', 4.0);
+INSERT INTO Product VALUES (111, 'Cotton T-Shirt',      'Clothing',     450.00, 50, 'StyleWear', 3.5);
+INSERT INTO Product VALUES (112, 'Pro Running Shoes',   'Clothing',    2100.00, 14, 'SportFit', 4.3);
+INSERT INTO Product VALUES (113, 'Winter Hoodie',       'Clothing',    1300.00,  0, 'FashionHub', 4.2);
+INSERT INTO Product VALUES (114, 'Ceramic Coffee Mug',  'Kitchenware',  350.00, 60, 'HomeBasics', 4.1);
+INSERT INTO Product VALUES (115, 'Stainless Water Bottle','Kitchenware', 650.00, 22, 'HomeBasics', 4.0);
+COMMIT;
+
+-- =============================================================================
+-- Task 4: Display all products whose price is greater than ₹1,000.
+-- =============================================================================
+SELECT * 
+FROM Product 
+WHERE Price > 1000;
+
+-- =============================================================================
+-- Task 5: Display products whose price lies between ₹500 and ₹2,500.
+-- =============================================================================
+SELECT * 
+FROM Product 
+WHERE Price BETWEEN 500 AND 2500;
+
+-- =============================================================================
+-- Task 6: Display products belonging to the Electronics, Furniture, or Clothing categories.
+-- =============================================================================
+SELECT * 
+FROM Product 
+WHERE Category IN ('Electronics', 'Furniture', 'Clothing');
+
+-- =============================================================================
+-- Task 7: Display products with a rating greater than or equal to 4.
+-- =============================================================================
+SELECT * 
+FROM Product 
+WHERE Rating >= 4.0;
+
+-- =============================================================================
+-- Task 8: Display products whose quantity is less than 20.
+-- =============================================================================
+SELECT * 
+FROM Product 
+WHERE Quantity < 20;
+
+-- =============================================================================
+-- Task 9: Display products whose names contain the word or letter sequence "Pro".
+-- =============================================================================
+SELECT * 
+FROM Product 
+WHERE Product_Name LIKE '%Pro%';
+
+-- =============================================================================
+-- Task 10: Display the products in descending order of price.
+-- =============================================================================
+SELECT * 
+FROM Product 
+ORDER BY Price DESC;
+
+-- =============================================================================
+-- Task 11: Display the five most expensive products.
+-- (Oracle 12c+ FETCH FIRST clause)
+-- =============================================================================
+SELECT * 
+FROM Product 
+ORDER BY Price DESC 
+FETCH FIRST 5 ROWS ONLY;
+
+-- Note for older Oracle versions (pre-12c):
+-- SELECT * FROM (SELECT * FROM Product ORDER BY Price DESC) WHERE ROWNUM <= 5;
+
+-- =============================================================================
+-- Task 12: Find the total number of products available.
+-- =============================================================================
+SELECT COUNT(*) AS Total_Products 
+FROM Product;
+
+-- =============================================================================
+-- Task 13: Find the total quantity of products available in the store.
+-- =============================================================================
+SELECT SUM(Quantity) AS Total_Quantity 
+FROM Product;
+
+-- =============================================================================
+-- Task 14: Find the average price of all products.
+-- =============================================================================
+SELECT AVG(Price) AS Average_Price 
+FROM Product;
+
+-- =============================================================================
+-- Task 15: Find the highest and lowest product prices.
+-- =============================================================================
+SELECT MAX(Price) AS Highest_Price, 
+       MIN(Price) AS Lowest_Price 
+FROM Product;
+
+-- =============================================================================
+-- Task 16: Calculate the total inventory value using: Price * Quantity.
+-- =============================================================================
+SELECT Product_ID, 
+       Product_Name, 
+       Price, 
+       Quantity, 
+       (Price * Quantity) AS Total_Inventory_Value 
+FROM Product;
+
+-- =============================================================================
+-- Task 17: Find the number of products available in each category.
+-- =============================================================================
+SELECT Category, COUNT(*) AS Total_Products 
+FROM Product 
+GROUP BY Category;
+
+-- =============================================================================
+-- Task 18: Find the average price of products in each category.
+-- =============================================================================
+SELECT Category, AVG(Price) AS Avg_Category_Price 
+FROM Product 
+GROUP BY Category;
+
+-- =============================================================================
+-- Task 19: Display only those categories having more than three products.
+-- =============================================================================
+SELECT Category, COUNT(*) AS Total_Products 
+FROM Product 
+GROUP BY Category 
+HAVING COUNT(*) > 3;
+
+-- =============================================================================
+-- Task 20: Find products whose price is greater than the average price of all products using a subquery.
+-- =============================================================================
+SELECT * 
+FROM Product 
+WHERE Price > (SELECT AVG(Price) FROM Product);
+
+-- =============================================================================
+-- Task 21: Find the product or products having the highest price using a subquery.
+-- =============================================================================
+SELECT * 
+FROM Product 
+WHERE Price = (SELECT MAX(Price) FROM Product);
+
+-- =============================================================================
+-- Task 22: Increase the price of all Electronics products by 5%.
+-- =============================================================================
+UPDATE Product 
+SET Price = Price * 1.05 
+WHERE Category = 'Electronics';
+COMMIT;
+
+-- =============================================================================
+-- Task 23: Reduce the quantity of a selected product after a sale.
+-- =============================================================================
+UPDATE Product 
+SET Quantity = Quantity - 2 
+WHERE Product_ID = 101;
+COMMIT;
+
+-- =============================================================================
+-- Task 24: Delete products whose quantity is zero.
+-- =============================================================================
+DELETE FROM Product 
+WHERE Quantity = 0;
+COMMIT;
+
+-- =============================================================================
+-- Task 25: Add a new column Discount to the Product table.
+-- =============================================================================
+ALTER TABLE Product 
+ADD Discount NUMBER(5, 2) DEFAULT 0.00;
+
+-- =============================================================================
+-- Task 26: Update the discount for selected products.
+-- =============================================================================
+UPDATE Product 
+SET Discount = 10.00 
+WHERE Category = 'Electronics';
+
+UPDATE Product 
+SET Discount = 5.00 
+WHERE Category = 'Furniture';
+COMMIT;
+
+-- =============================================================================
+-- Task 27: Display the final product catalogue after all modifications.
+-- =============================================================================
+SELECT * FROM Product;

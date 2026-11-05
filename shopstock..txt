@@ -1,0 +1,185 @@
+-- Task 1: Create the Product table using suitable data types and constraints.
+-- Fields: Product_ID, Product_Name, Category, Brand, Price, Quantity, Supplier_City
+-- -----------------------------------------------------------------------------
+CREATE TABLE Product (
+    Product_ID    NUMBER PRIMARY KEY,
+    Product_Name  VARCHAR2(100) NOT NULL,
+    Category      VARCHAR2(50),
+    Brand         VARCHAR2(50),
+    Price         NUMBER(10, 2) CHECK (Price >= 0),
+    Quantity      NUMBER(5) CHECK (Quantity >= 0),
+    Supplier_City VARCHAR2(50)
+);
+
+-- -----------------------------------------------------------------------------
+-- Task 2: Insert at least 15 product records belonging to different categories and brands.
+-- -----------------------------------------------------------------------------
+INSERT INTO Product VALUES (101, 'Smartphone X',    'Electronics', 'TechCorp', 1200.00, 15, 'Delhi');
+INSERT INTO Product VALUES (102, 'Smart TV 55',     'Electronics', 'Vision',   850.00,  8,  'Mumbai');
+INSERT INTO Product VALUES (103, 'Notebook Hardcover','Stationery','PaperGrid', 150.00,  50, 'Bengaluru');
+INSERT INTO Product VALUES (104, 'Sketch Book',     'Stationery',  'ArtPro',    450.00,  0,  'Delhi');
+INSERT INTO Product VALUES (105, 'Leather Wallet',  'Accessories', 'StyleX',    1500.00, 25, 'Chennai');
+INSERT INTO Product VALUES (106, 'Sunglasses',      'Accessories', 'RayStyl',   3500.00, 12, 'Mumbai');
+INSERT INTO Product VALUES (107, 'Soundbar 300',    'Electronics', 'AudioPro',  5500.00, 5,  'Pune');
+INSERT INTO Product VALUES (108, 'Stapler Heavy',   'Stationery',  'OfficeMax', 250.00,  30, 'Delhi');
+INSERT INTO Product VALUES (109, 'Story Book',      'Stationery',  'ReadMore',  350.00,  20, 'Kolkata');
+INSERT INTO Product VALUES (110, 'Sports Watch',    'Accessories', 'TimeGear',  4200.00, 18, 'Bengaluru');
+INSERT INTO Product VALUES (111, 'Smart Speaker',   'Electronics', 'TechCorp', 2800.00, 10, 'Mumbai');
+INSERT INTO Product VALUES (112, 'Silver Pen Set',  'Stationery',  'LuxPen',    800.00,  40, 'Chennai');
+INSERT INTO Product VALUES (113, 'Silk Scarf',      'Accessories', 'StyleX',    950.00,  15, 'Pune');
+INSERT INTO Product VALUES (114, 'Student Backpack', 'Accessories','GearUp',   1800.00, 22, 'Delhi');
+INSERT INTO Product VALUES (115, 'Steel Bottle',    'Accessories', 'Hydro',     600.00,  35, 'Kolkata');
+COMMIT;
+
+-- -----------------------------------------------------------------------------
+-- Task 3: Display all products available in the table.
+-- -----------------------------------------------------------------------------
+SELECT * FROM Product;
+
+-- -----------------------------------------------------------------------------
+-- Task 4: Display only Product_Name, Category, and Price.
+-- -----------------------------------------------------------------------------
+SELECT Product_Name, Category, Price 
+FROM Product;
+
+-- -----------------------------------------------------------------------------
+-- Task 5: Find all products having a price greater than 1000.
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Product 
+WHERE Price > 1000;
+
+-- -----------------------------------------------------------------------------
+-- Task 6: Find products whose price lies between 500 and 5000.
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Product 
+WHERE Price BETWEEN 500 AND 5000;
+
+-- -----------------------------------------------------------------------------
+-- Task 7: Display products belonging to a particular category (e.g., 'Electronics').
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Product 
+WHERE Category = 'Electronics';
+
+-- -----------------------------------------------------------------------------
+-- Task 8: Display products belonging to either Electronics, Stationery, or Accessories using IN.
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Product 
+WHERE Category IN ('Electronics', 'Stationery', 'Accessories');
+
+-- -----------------------------------------------------------------------------
+-- Task 9: Find products whose names start with the letter "S".
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Product 
+WHERE Product_Name LIKE 'S%';
+
+-- -----------------------------------------------------------------------------
+-- Task 10: Find products whose names contain the word "Book".
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Product 
+WHERE Product_Name LIKE '%Book%';
+
+-- -----------------------------------------------------------------------------
+-- Task 11: Display all products in ascending order of price.
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Product 
+ORDER BY Price ASC;
+
+-- -----------------------------------------------------------------------------
+-- Task 12: Display all products in descending order of quantity.
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Product 
+ORDER BY Quantity DESC;
+
+-- -----------------------------------------------------------------------------
+-- Task 13: Find the most expensive and least expensive product using MAX() and MIN().
+-- -----------------------------------------------------------------------------
+SELECT MAX(Price) AS Most_Expensive, 
+       MIN(Price) AS Least_Expensive 
+FROM Product;
+
+-- -----------------------------------------------------------------------------
+-- Task 14: Calculate the average price of all products using AVG().
+-- -----------------------------------------------------------------------------
+SELECT AVG(Price) AS Average_Price 
+FROM Product;
+
+-- -----------------------------------------------------------------------------
+-- Task 15: Calculate the total quantity of products available using SUM().
+-- -----------------------------------------------------------------------------
+SELECT SUM(Quantity) AS Total_Quantity 
+FROM Product;
+
+-- -----------------------------------------------------------------------------
+-- Task 16: Count the total number of products using COUNT().
+-- -----------------------------------------------------------------------------
+SELECT COUNT(*) AS Total_Products 
+FROM Product;
+
+-- -----------------------------------------------------------------------------
+-- Task 17: Display the different product categories using DISTINCT.
+-- -----------------------------------------------------------------------------
+SELECT DISTINCT Category 
+FROM Product;
+
+-- -----------------------------------------------------------------------------
+-- Task 18: Count the number of products available in each category using GROUP BY.
+-- -----------------------------------------------------------------------------
+SELECT Category, COUNT(*) AS Product_Count 
+FROM Product 
+GROUP BY Category;
+
+-- -----------------------------------------------------------------------------
+-- Task 19: Display only those categories having more than three products using HAVING.
+-- -----------------------------------------------------------------------------
+SELECT Category, COUNT(*) AS Product_Count 
+FROM Product 
+GROUP BY Category 
+HAVING COUNT(*) > 3;
+
+-- -----------------------------------------------------------------------------
+-- Task 20: Increase the price of products belonging to a particular category by 10%.
+-- -----------------------------------------------------------------------------
+UPDATE Product 
+SET Price = Price * 1.10 
+WHERE Category = 'Electronics';
+COMMIT;
+
+-- -----------------------------------------------------------------------------
+-- Task 21: Update the quantity of a selected product.
+-- -----------------------------------------------------------------------------
+UPDATE Product 
+SET Quantity = 25 
+WHERE Product_ID = 101;
+COMMIT;
+
+-- -----------------------------------------------------------------------------
+-- Task 22: Delete products whose quantity is zero.
+-- -----------------------------------------------------------------------------
+DELETE FROM Product 
+WHERE Quantity = 0;
+COMMIT;
+
+-- -----------------------------------------------------------------------------
+-- Task 23: Add a new column named Discount using ALTER TABLE.
+-- -----------------------------------------------------------------------------
+ALTER TABLE Product 
+ADD Discount NUMBER(5, 2) DEFAULT 0.00;
+
+-- -----------------------------------------------------------------------------
+-- Task 24: Rename a column in the Product table (e.g., Supplier_City to City).
+-- -----------------------------------------------------------------------------
+ALTER TABLE Product 
+RENAME COLUMN Supplier_City TO City;
+
+-- -----------------------------------------------------------------------------
+-- Task 25: Display the final contents of the Product table after performing all operations.
+-- -----------------------------------------------------------------------------
+SELECT * FROM Product;

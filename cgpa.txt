@@ -1,0 +1,146 @@
+-- -----------------------------------------------------------------------------
+-- Task: Create Table
+-- -----------------------------------------------------------------------------
+CREATE TABLE Student (
+    Student_ID   NUMBER PRIMARY KEY,
+    Student_Name VARCHAR2(50) NOT NULL,
+    Gender       CHAR(1) CHECK (Gender IN ('M', 'F', 'O')),
+    Department   VARCHAR2(20),
+    Semester     NUMBER(2) CHECK (Semester > 0),
+    Age          NUMBER(3) CHECK (Age > 0),
+    CGPA         NUMBER(3, 2) CHECK (CGPA BETWEEN 0.00 AND 10.00)
+);
+
+-- -----------------------------------------------------------------------------
+-- 1. Insert at least 10 different student records into the table.
+-- -----------------------------------------------------------------------------
+INSERT INTO Student VALUES (101, 'Aarav Sharma',  'M', 'CSE', 4, 20, 8.50);
+INSERT INTO Student VALUES (102, 'Ananya Sen',    'F', 'ECE', 6, 21, 9.10);
+INSERT INTO Student VALUES (103, 'Bhavya Gupta',  'F', 'ME',  4, 20, 7.80);
+INSERT INTO Student VALUES (104, 'Amit Verma',    'M', 'CSE', 2, 19, 8.00);
+INSERT INTO Student VALUES (105, 'Dev Patel',     'M', 'EEE', 6, 21, 6.90);
+INSERT INTO Student VALUES (106, 'Aditi Rao',     'F', 'ECE', 4, 20, 8.95);
+INSERT INTO Student VALUES (107, 'Ishaan Kumar', 'M', 'CSE', 8, 22, 9.50);
+INSERT INTO Student VALUES (108, 'Kavya Singh',   'F', 'CE',  6, 21, 7.40);
+INSERT INTO Student VALUES (109, 'Rohan Mehta',   'M', 'ECE', 4, 20, 8.20);
+INSERT INTO Student VALUES (110, 'Sneha Reddy',   'F', 'CSE', 6, 21, 8.75);
+COMMIT;
+
+-- -----------------------------------------------------------------------------
+-- 2. Write a query to display the complete student database.
+-- -----------------------------------------------------------------------------
+SELECT * FROM Student;
+
+-- -----------------------------------------------------------------------------
+-- 3. Display the names and CGPAs of all students.
+-- -----------------------------------------------------------------------------
+SELECT Student_Name, CGPA 
+FROM Student;
+
+-- -----------------------------------------------------------------------------
+-- 4. Retrieve the details of students whose CGPA is 8.0 or above.
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Student 
+WHERE CGPA >= 8.0;
+
+-- -----------------------------------------------------------------------------
+-- 5. Retrieve students belonging to either the CSE or ECE department.
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Student 
+WHERE Department IN ('CSE', 'ECE');
+
+-- -----------------------------------------------------------------------------
+-- 6. Find students currently studying in Semester 4 or Semester 6.
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Student 
+WHERE Semester IN (4, 6);
+
+-- -----------------------------------------------------------------------------
+-- 7. Display students whose names start with the letter 'A'.
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Student 
+WHERE Student_Name LIKE 'A%';
+
+-- -----------------------------------------------------------------------------
+-- 8. Display students in ascending order of their names.
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Student 
+ORDER BY Student_Name ASC;
+
+-- -----------------------------------------------------------------------------
+-- 9. Display the three students having the highest CGPA.
+-- (Oracle 12c+ FETCH clause)
+-- -----------------------------------------------------------------------------
+SELECT * 
+FROM Student 
+ORDER BY CGPA DESC 
+FETCH FIRST 3 ROWS ONLY;
+
+-- -----------------------------------------------------------------------------
+-- 10. Find the average CGPA of all students.
+-- -----------------------------------------------------------------------------
+SELECT AVG(CGPA) AS Average_CGPA 
+FROM Student;
+
+-- -----------------------------------------------------------------------------
+-- 11. Find the highest and lowest CGPA in the class.
+-- -----------------------------------------------------------------------------
+SELECT MAX(CGPA) AS Highest_CGPA, 
+       MIN(CGPA) AS Lowest_CGPA 
+FROM Student;
+
+-- -----------------------------------------------------------------------------
+-- 12. Count the number of students in each department.
+-- -----------------------------------------------------------------------------
+SELECT Department, COUNT(*) AS Total_Students 
+FROM Student 
+GROUP BY Department;
+
+-- -----------------------------------------------------------------------------
+-- 13. Add a new attribute Email to the Student table using ALTER TABLE.
+-- -----------------------------------------------------------------------------
+ALTER TABLE Student 
+ADD Email VARCHAR2(100);
+
+-- -----------------------------------------------------------------------------
+-- 14. Update the email address of selected students.
+-- -----------------------------------------------------------------------------
+UPDATE Student 
+SET Email = 'aarav.sharma@example.com' 
+WHERE Student_ID = 101;
+
+UPDATE Student 
+SET Email = 'ananya.sen@example.com' 
+WHERE Student_ID = 102;
+COMMIT;
+
+-- -----------------------------------------------------------------------------
+-- 15. Change the semester of a student using UPDATE.
+-- -----------------------------------------------------------------------------
+UPDATE Student 
+SET Semester = 5 
+WHERE Student_ID = 101;
+COMMIT;
+
+-- -----------------------------------------------------------------------------
+-- 16. Delete one student record using the student's Student_ID.
+-- -----------------------------------------------------------------------------
+DELETE FROM Student 
+WHERE Student_ID = 105;
+COMMIT;
+
+-- -----------------------------------------------------------------------------
+-- 17. Display the final structure of the Student table.
+-- (Run this command directly in SQL*Plus or Oracle SQL Developer)
+-- -----------------------------------------------------------------------------
+DESC Student;
+
+-- -----------------------------------------------------------------------------
+-- 18. Display the final records after all modifications.
+-- -----------------------------------------------------------------------------
+SELECT * FROM Student;
